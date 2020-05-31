@@ -1,0 +1,36 @@
+{
+  "name": "inspector-nodejs",
+  "version": "1.0.0",
+  "description": "Real-Time monitoring for NodeJS Applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inspector-apm/inspector-nodejs.git"
+  },
+  "keywords": [
+    "nodejs",
+    "monitoring",
+    "events"
+  ],
+  "author": "Riccardo Tartaglia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/inspector-apm/inspector-nodejs/issues"
+  },
+  "homepage": "https://github.com/inspector-apm/inspector-nodejs#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "tap": "^14.10.7"
+  },
+  "dependencies": {}
+}
