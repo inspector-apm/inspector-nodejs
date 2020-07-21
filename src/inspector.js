@@ -1,6 +1,7 @@
 const Transaction = require('./lib/transaction.js')
 const Segment = require('./lib/segment.js')
 const Transport = require('./lib/transport')
+const IError = require('./lib/error')
 
 class Inspector {
 
@@ -16,8 +17,18 @@ class Inspector {
     this._transaction = null
     this.transport = new Transport(this._conf)
 
-    process.on('exit', (code) => {
-      this.flush()
+    process.on('uncaughtException', async (err, origin) => {
+      await this.reportException(err)
+    })
+
+    process.on('unhandledRejection', async (err, origin) => {
+      await this.reportException(err)
+    })
+
+    process.on('beforeExit', (code) => {
+      if(this.isRecording()) {
+        this.flush()
+      }
     })
   }
 
@@ -52,24 +63,30 @@ class Inspector {
     try {
       return await fn(segment)
     } catch (e) {
+      await this.reportException(e)
       if (throwE) {
         throw e
       }
-      this.reportException(e)
     } finally {
       segment.end()
     }
   }
 
-  reportException () {
-    // todo implement
+  async reportException (error) {
+    if (this.isRecording()) {
+      const segment = this.startSegment('exception', error.message)
+      const e = new IError(error, this._transaction)
+      await e.populateError()
+      this.addEntries(e)
+      segment.end()
+    }
   }
 
   addEntries (data) {
-    if(Array.isArray(data)) {
-        data.forEach(item => {
-          this.transport.addEntry(item)
-        })
+    if (Array.isArray(data)) {
+      data.forEach(item => {
+        this.transport.addEntry(item)
+      })
     } else {
       this.transport.addEntry(data)
     }

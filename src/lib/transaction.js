@@ -26,7 +26,7 @@ class Transaction {
       name: user.name,
       email: user.email
     }
-  }ù
+  }
 
   start (time = null) {
     this._timestamp = time ? new Date(time).getTime() : new Date().getTime()
@@ -51,7 +51,6 @@ class Transaction {
       'name': this._name,
       'type': this._type,
       'timestamp': parseInt((this._timestamp / 1000).toFixed(0)),
-      // 'start': (this._timestamp / 1000).toFixed(0),
       'end': parseInt(((this._timestamp + this._duration) / 1000).toFixed(0)),
       'duration': this._duration,
       'memory_peak': this._memory_peak,

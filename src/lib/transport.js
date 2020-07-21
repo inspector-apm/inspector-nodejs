@@ -42,15 +42,14 @@ class Transport {
     }
 
     const req = https.request(options, (res) => {
-      let responseString = ''
       res.on('end', function () {
         // print to console when response ends
       })
     })
 
     req.on('error', (e) => {
-      console.error(e);
-    });
+      console.error('errore', e)
+    })
 
     req.write(JSON.stringify(items))
     req.end()
