@@ -25,6 +25,20 @@ class Segment {
     return this
   }
 
+  toTransport () {
+    return {
+      "model": "segment",
+      "type": this._type,
+      "label": this._label,
+      "timestamp": parseInt((this._timestamp / 1000).toFixed(0)),
+      "start": parseInt((this._start / 1000).toFixed(0)),
+      "duration": this._duration,
+      "transaction": {
+        "hash": this._transaction.hash
+      }
+    }
+  }
+
   get label () {
     return this._label
   }

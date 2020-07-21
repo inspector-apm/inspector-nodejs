@@ -3,7 +3,7 @@ const { Inspector } = require('../../index')
 
 async function inspector_test (throwError = false) {
   const inspector = new Inspector({})
-  tap.equal(inspector.conf.url === 'https://ingest.inspector.dev', true)
+  tap.equal(inspector.conf.url === 'ingest.inspector.dev', true)
 
   const transaction = inspector.startTransaction('foo')
   tap.equal(inspector.currentTransaction().hash === transaction.hash, true)
@@ -43,7 +43,7 @@ async function inspector_test (throwError = false) {
 
   inspector.flush()
 
-  tap.equal(inspector.hasTransaction(), false)
+  tap.equal(inspector.isRecording(), false)
   tap.equal(inspector.currentTransaction(), null)
 }
 

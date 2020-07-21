@@ -1,20 +1,20 @@
 const Transaction = require('./lib/transaction.js')
 const Segment = require('./lib/segment.js')
+const Transport = require('./lib/transport')
 
 class Inspector {
 
   constructor (conf) {
     this._conf = {
-      url: 'https://ingest.inspector.dev',
+      url: 'ingest.inspector.dev',
       apiKey: '',
       enabled: true,
-      transport: null,
       version: '1.0.0',
       options: [],
       ...conf
     }
     this._transaction = null
-    //@todo transport class
+    this.transport = new Transport(this._conf)
 
     process.on('exit', (code) => {
       this.flush()
@@ -25,7 +25,7 @@ class Inspector {
     this._transaction = new Transaction(name)
     this._transaction.start()
 
-    //@todo add transaction to transport
+    this.addEntries(this._transaction)
 
     return this._transaction
   }
@@ -34,20 +34,15 @@ class Inspector {
     return this._transaction
   }
 
-  hasTransaction () {
-    return !!this._transaction
-  }
-
   isRecording () {
-    // todo ridondante?
-    return this.hasTransaction()
+    return !!this._transaction
   }
 
   startSegment (type, label = null) {
     const segment = new Segment(this._transaction, type, label)
     segment.start()
 
-    //@todo add segment to transport
+    this.addEntries(segment)
 
     return segment
   }
@@ -70,8 +65,14 @@ class Inspector {
     // todo implement
   }
 
-  addEntries () {
-    // todo implement
+  addEntries (data) {
+    if(Array.isArray(data)) {
+        data.forEach(item => {
+          this.transport.addEntry(item)
+        })
+    } else {
+      this.transport.addEntry(data)
+    }
   }
 
   flush () {
@@ -83,8 +84,7 @@ class Inspector {
       this._transaction.end()
     }
 
-    //@todo add transport flush
-
+    this.transport.flush()
     this._transaction = null
   }
 
