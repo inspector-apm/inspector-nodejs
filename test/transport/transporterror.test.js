@@ -16,7 +16,7 @@ async function transport_test (throwError = false) {
     'test label',
   )
 
-  const peppe = transaction.foo.bar
+  const error = transaction.test.foo
 
   transaction.end()
   inspector.flush()

@@ -9,7 +9,7 @@ class IError {
     this._timestamp = new Date().getTime()
     this._transaction = { hash }
     this._handled = false
-    if(error.code){
+    if (error.code) {
       this._code = error.code
     }
     this._errorStack = error.stack
@@ -41,7 +41,7 @@ class IError {
       'transaction': this._transaction
     }
 
-    if(this._code){
+    if (this._code) {
       obj.code = this._code
     }
 
@@ -93,7 +93,7 @@ class IError {
   }
 
   async getCodeOfStackElement (stackObj, limit = 10) {
-    let code = ''
+    const code = []
     let i = 0
     let minLine = (parseInt(stackObj.line) - limit) > 1 ? (stackObj.line - limit) : 1
     let maxLine = parseInt(stackObj.line) + limit
@@ -106,13 +106,14 @@ class IError {
     for await (const line of rl) {
       i++
       if (i >= minLine && i <= maxLine) {
-        code += line
-        if (i < maxLine) {
-          code += '\n'
+        const obj = {
+          code: line,
+          line: i
         }
+        code.push(obj)
       }
     }
-    return `${code}`
+    return code
   }
 
   formatStackElementToObj (stackRow) {
