@@ -8,15 +8,7 @@ async function transport_test (throwError = false) {
 
   const transaction = inspector.startTransaction('foo')
 
-  const segment = await inspector.addSegment(
-    async (segment) => {
-      throw new Error('Async Error')
-    },
-    'test async',
-    'test label',
-  )
-
-  const error = transaction.test.foo
+  const error = test.foo
 
   transaction.end()
   inspector.flush()

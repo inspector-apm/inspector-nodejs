@@ -12,6 +12,7 @@ class Inspector {
       enabled: true,
       version: '1.0.0',
       options: [],
+      maxEntries: 100,
       ...conf
     }
     this._transaction = null
@@ -83,13 +84,16 @@ class Inspector {
   }
 
   addEntries (data) {
-    if (Array.isArray(data)) {
-      data.forEach(item => {
-        this.transport.addEntry(item)
-      })
-    } else {
-      this.transport.addEntry(data)
+    if(Array.isArray(this.transport.queue) && this.transport.queue.length < this._conf.maxEntries) {
+      if (Array.isArray(data)) {
+        data.forEach(item => {
+          this.transport.addEntry(item)
+        })
+      } else {
+        this.transport.addEntry(data)
+      }
     }
+    return this
   }
 
   flush () {
