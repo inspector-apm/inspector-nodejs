@@ -1,6 +1,6 @@
 'use strict'
 
-const os = require("os");
+const os = require('os')
 
 class Transaction {
 
@@ -11,6 +11,8 @@ class Transaction {
     this._hash = `${Date.now()}${Math.floor(Math.random() * 100)}`
     this._http = {}
     this._user = {}
+    this._context = {}
+    this._result = ''
     this._host = {
       hostname: os.hostname(),
       /*ip: os.address,
@@ -26,6 +28,16 @@ class Transaction {
       name: user.name,
       email: user.email
     }
+  }
+
+  setResult (result) {
+    this._result = result
+    return this
+  }
+
+  addContext (label, data) {
+    this._context[label] = data
+    return this
   }
 
   start (time = null) {
@@ -53,10 +65,12 @@ class Transaction {
       'timestamp': parseInt((this._timestamp / 1000).toFixed(0)),
       'end': parseInt(((this._timestamp + this._duration) / 1000).toFixed(0)),
       'duration': this._duration,
+      'result': this._result,
       'memory_peak': this._memory_peak,
       'user': this._user,
       'http': this._http,
-      'host': this._host
+      'host': this._host,
+      'context': this._context
     }
   }
 

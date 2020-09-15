@@ -27,7 +27,7 @@ class Inspector {
     })
 
     process.on('beforeExit', (code) => {
-      if(this.isRecording()) {
+      if (this.isRecording()) {
         this.flush()
       }
     })
@@ -84,7 +84,7 @@ class Inspector {
   }
 
   addEntries (data) {
-    if(Array.isArray(this.transport.queue) && this.transport.queue.length < this._conf.maxEntries) {
+    if (Array.isArray(this.transport.queue) && this.transport.queue.length < this._conf.maxEntries) {
       if (Array.isArray(data)) {
         data.forEach(item => {
           this.transport.addEntry(item)
