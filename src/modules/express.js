@@ -1,5 +1,5 @@
 'use strict'
-module.exports = function (inspector, opts) {
+module.exports = function (inspector, opts = {}) {
 
   return (req, res, next) => {
 
