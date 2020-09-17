@@ -52,6 +52,8 @@ class Inspector {
       ...this._conf,
       ...conf
     }
+
+    this.transport.setConf(this._conf)
     return this
   }
 

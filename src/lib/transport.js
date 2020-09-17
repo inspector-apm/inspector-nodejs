@@ -11,6 +11,15 @@ class Transport {
     this.queue = []
   }
 
+  setConf (conf) {
+    this._conf = {
+      ...this._conf,
+      ...conf
+    }
+
+    this.queue = []
+  }
+
   flush () {
     if (Array.isArray(this.queue) && this.queue.length === 0) {
       return
