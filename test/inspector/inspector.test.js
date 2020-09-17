@@ -1,8 +1,7 @@
 const tap = require('tap')
-const { Inspector } = require('../../index')
 
 async function inspector_test (throwError = false) {
-  const inspector = new Inspector({})
+  const inspector = require('../../index')
   tap.equal(inspector.conf.url === 'ingest.inspector.dev', true)
 
   const transaction = inspector.startTransaction('foo')
@@ -48,7 +47,7 @@ async function inspector_test (throwError = false) {
 }
 
 function inspector_test_transactionNotEnd () {
-  const inspector = new Inspector({})
+  const inspector = require('../../index')
   const transaction = inspector.startTransaction('foo')
 
   tap.equal(inspector.currentTransaction().hash === transaction.hash, true)

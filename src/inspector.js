@@ -5,6 +5,12 @@ const IError = require('./lib/error')
 
 class Inspector {
 
+  _MODULES = {
+    'mysql2': (module, inspector) => {
+      return require('./modules/mysql2.js')(module, inspector)
+    }
+  }
+
   constructor (conf) {
     this._conf = {
       url: 'ingest.inspector.dev',
@@ -19,11 +25,19 @@ class Inspector {
     this.transport = new Transport(this._conf)
 
     process.on('uncaughtException', async (err, origin) => {
-      await this.reportException(err)
+      if (this.isRecording()) {
+        await this.reportException(err)
+      } else {
+        console.log(err)
+      }
     })
 
     process.on('unhandledRejection', async (err, origin) => {
-      await this.reportException(err)
+      if (this.isRecording()) {
+        await this.reportException(err)
+      } else {
+        console.log(err)
+      }
     })
 
     process.on('beforeExit', (code) => {
@@ -31,6 +45,14 @@ class Inspector {
         this.flush()
       }
     })
+  }
+
+  init (conf = {}) {
+    this._conf = {
+      ...this._conf,
+      ...conf
+    }
+    return this
   }
 
   startTransaction (name) {
@@ -74,13 +96,11 @@ class Inspector {
   }
 
   async reportException (error) {
-    if (this.isRecording()) {
-      const segment = this.startSegment('exception', error.message)
-      const e = new IError(error, this._transaction)
-      await e.populateError()
-      this.addEntries(e)
-      segment.end()
-    }
+    const segment = this.startSegment('exception', error.message)
+    const e = new IError(error, this._transaction)
+    await e.populateError()
+    this.addEntries(e)
+    segment.end()
   }
 
   addEntries (data) {
@@ -94,6 +114,18 @@ class Inspector {
       }
     }
     return this
+  }
+
+  useModule (name, module = null, version = null) {
+    if (Object.keys(this._MODULES).indexOf(name) === -1) {
+      throw new Error('Module not found')
+    }
+    this._MODULES[name](module, this, version)
+    return this
+  }
+
+  expressMiddleware (opts) {
+    return require('./modules/express.js')(this, opts)
   }
 
   flush () {

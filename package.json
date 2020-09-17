@@ -32,5 +32,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "tap": "^14.10.7"
   },
-  "dependencies": {}
+  "dependencies": {
+    "shimmer": "^1.2.1"
+  }
 }
