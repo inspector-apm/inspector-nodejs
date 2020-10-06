@@ -1,28 +1,27 @@
 const Transaction = require('./lib/transaction.js')
 const Segment = require('./lib/segment.js')
 const Transport = require('./lib/transport')
+const Instrumentation = require('./lib/instrumentation')
 const IError = require('./lib/error')
 
 class Inspector {
 
-  _MODULES = {
-    'mysql2': (module, inspector) => {
-      return require('./modules/mysql2.js')(module, inspector)
-    }
-  }
-
-  constructor (conf) {
+  constructor (conf = {}) {
     this._conf = {
       url: 'ingest.inspector.dev',
       apiKey: '',
       enabled: true,
       version: '1.0.0',
       options: [],
+      modules: [],
       maxEntries: 100,
       ...conf
     }
     this._transaction = null
     this.transport = new Transport(this._conf)
+
+    // patch modules with instrumentations
+    Instrumentation.init(this)
 
     process.on('uncaughtException', async (err, origin) => {
       if (this.isRecording()) {
@@ -45,16 +44,6 @@ class Inspector {
         this.flush()
       }
     })
-  }
-
-  init (conf = {}) {
-    this._conf = {
-      ...this._conf,
-      ...conf
-    }
-
-    this.transport.setConf(this._conf)
-    return this
   }
 
   startTransaction (name) {
@@ -116,18 +105,6 @@ class Inspector {
       }
     }
     return this
-  }
-
-  useModule (name, module = null, version = null) {
-    if (Object.keys(this._MODULES).indexOf(name) === -1) {
-      throw new Error('Module not found')
-    }
-    this._MODULES[name](module, this, version)
-    return this
-  }
-
-  expressMiddleware (opts) {
-    return require('./modules/express.js')(this, opts)
   }
 
   flush () {

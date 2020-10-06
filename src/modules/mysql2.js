@@ -2,7 +2,7 @@
 
 const shimmer = require('shimmer')
 
-module.exports = function (mysql2, inspector) {
+module.exports = function (mysql2, inspector, version) {
 
   shimmer.wrap(mysql2.Connection.prototype, 'query', wrapQuery)
   shimmer.wrap(mysql2.Connection.prototype, 'execute', wrapQuery)
