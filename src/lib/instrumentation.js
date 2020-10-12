@@ -22,7 +22,7 @@ class Instrumentation {
 
   patch (name, agent) {
     if (Object.keys(this._MODULES).indexOf(name) === -1) {
-      throw new Error('Module not found')
+      throw new Error(`Module ${name} not supported`)
     }
     this._MODULES[name](agent)
     return this
