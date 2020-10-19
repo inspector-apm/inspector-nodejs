@@ -1,10 +1,7 @@
 const tap = require('tap')
-const { Inspector } = require('../../index')
+const inspector = require('../../index').init({ apiKey: '61b8b0f75a4b4dc7682eedcce097b64b' })
 
 async function transport_test (throwError = false) {
-  const inspector = new Inspector({
-    apiKey: '61b8b0f75a4b4dc7682eedcce097b64b'
-  })
   tap.equal(inspector.conf.url === 'ingest.inspector.dev', true)
 
   const transaction = inspector.startTransaction('foo')

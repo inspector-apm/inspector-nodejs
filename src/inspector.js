@@ -1,29 +1,42 @@
 const Transaction = require('./lib/transaction.js')
 const Segment = require('./lib/segment.js')
 const Transport = require('./lib/transport')
+const Instrumentation = require('./lib/instrumentation')
 const IError = require('./lib/error')
 
 class Inspector {
 
-  constructor (conf) {
+  constructor (conf = {}) {
     this._conf = {
       url: 'ingest.inspector.dev',
-      apiKey: '',
+      ingestionKey: '',
       enabled: true,
       version: '1.0.0',
       options: [],
+      modules: [],
       maxEntries: 100,
       ...conf
     }
     this._transaction = null
     this.transport = new Transport(this._conf)
 
+    // patch modules with instrumentations
+    Instrumentation.init(this)
+
     process.on('uncaughtException', async (err, origin) => {
-      await this.reportException(err)
+      if (this.isRecording()) {
+        await this.reportException(err)
+      } else {
+        console.log(err)
+      }
     })
 
     process.on('unhandledRejection', async (err, origin) => {
-      await this.reportException(err)
+      if (this.isRecording()) {
+        await this.reportException(err)
+      } else {
+        console.log(err)
+      }
     })
 
     process.on('beforeExit', (code) => {
@@ -74,13 +87,11 @@ class Inspector {
   }
 
   async reportException (error) {
-    if (this.isRecording()) {
-      const segment = this.startSegment('exception', error.message)
-      const e = new IError(error, this._transaction)
-      await e.populateError()
-      this.addEntries(e)
-      segment.end()
-    }
+    const segment = this.startSegment('exception', error.message)
+    const e = new IError(error, this._transaction)
+    await e.populateError()
+    this.addEntries(e)
+    segment.end()
   }
 
   addEntries (data) {

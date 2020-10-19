@@ -11,6 +11,15 @@ class Transport {
     this.queue = []
   }
 
+  setConf (conf) {
+    this._conf = {
+      ...this._conf,
+      ...conf
+    }
+
+    this.queue = []
+  }
+
   flush () {
     if (Array.isArray(this.queue) && this.queue.length === 0) {
       return
@@ -36,7 +45,7 @@ class Transport {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-Inspector-Key': this._conf.apiKey,
+        'X-Inspector-Key': this._conf.ingestionKey,
         'X-Inspector-Version': this._conf.version,
       }
     }
