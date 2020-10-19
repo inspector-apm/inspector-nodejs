@@ -9,7 +9,7 @@ class Inspector {
   constructor (conf = {}) {
     this._conf = {
       url: 'ingest.inspector.dev',
-      apiKey: '',
+      ingestionKey: '',
       enabled: true,
       version: '1.0.0',
       options: [],

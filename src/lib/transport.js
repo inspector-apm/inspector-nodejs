@@ -45,7 +45,7 @@ class Transport {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-Inspector-Key': this._conf.apiKey,
+        'X-Inspector-Key': this._conf.ingestionKey,
         'X-Inspector-Version': this._conf.version,
       }
     }
