@@ -1,5 +1,7 @@
 const tap = require('tap')
-const inspector = require('../../index').init({ apiKey: '61b8b0f75a4b4dc7682eedcce097b64b' })
+const inspector = require('../../index')({
+  ingestionKey: '1b077c76ea167c449860eff6e9358227'
+})
 
 async function transport_test (throwError = false) {
   tap.equal(inspector.conf.url === 'ingest.inspector.dev', true)

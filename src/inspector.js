@@ -75,7 +75,11 @@ class Inspector {
   async addSegment (fn, type, label = null, throwE = false) {
     const segment = this.startSegment(type, label)
     try {
-      return await fn(segment)
+      if (fn[Symbol.toStringTag] === 'AsyncFunction') {
+        return await fn(segment)
+      } else {
+        return fn(segment)
+      }
     } catch (e) {
       await this.reportException(e)
       if (throwE) {
