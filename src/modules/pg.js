@@ -2,7 +2,7 @@
 
 const shimmer = require('shimmer')
 
-module.exports = function (pg, inspector, version) {
+module.exports = function (pg, inspector, version = null) {
   patchClient(pg.Client, 'pg.Client', inspector)
 
   // Trying to access the pg.native getter will trigger and log the warning

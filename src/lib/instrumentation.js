@@ -14,6 +14,16 @@ class Instrumentation {
         return require('../modules/express.js')(agent, opts)
       }
     },
+    'pg': (agent) => {
+      agent.expressMiddleware = (opts = {}) => {
+        return require('../modules/pg.js')(agent, opts)
+      }
+    },
+    'mongodb': (agent) => {
+      agent.expressMiddleware = (opts = {}) => {
+        return require('../modules/mongodb.js')(agent, opts)
+      }
+    },
   }
 
   init (agent) {
