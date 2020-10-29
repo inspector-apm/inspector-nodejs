@@ -15,14 +15,22 @@ class Instrumentation {
       }
     },
     'pg': (agent) => {
-      agent.expressMiddleware = (opts = {}) => {
-        return require('../modules/pg.js')(agent, opts)
-      }
+      Hook(['pg'], function (exports, name, basedir) {
+        const version = require(path.join(basedir, 'package.json')).version
+        return require('../modules/pg.js')(exports, agent, version)
+      })
     },
     'mongodb': (agent) => {
-      agent.expressMiddleware = (opts = {}) => {
-        return require('../modules/mongodb.js')(agent, opts)
-      }
+      Hook(['mongodb'], function (exports, name, basedir) {
+        const version = require(path.join(basedir, 'package.json')).version
+        return require('../modules/mongodb.js')(exports, agent, version)
+      })
+    },
+    'knex': (agent) => {
+      Hook(['knex'], function (exports, name, basedir) {
+        const version = require(path.join(basedir, 'package.json')).version
+        return require('../modules/knex.js')(exports, agent, version)
+      })
     },
   }
 

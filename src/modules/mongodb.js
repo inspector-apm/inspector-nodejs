@@ -1,7 +1,5 @@
 'use strict'
 
-const semver = require('semver')
-
 module.exports = (mongodb, inspector, version = null) => {
   const listener = mongodb.instrument()
   const activeSegments = new Map()
