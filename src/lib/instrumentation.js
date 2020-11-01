@@ -10,9 +10,12 @@ class Instrumentation {
       })
     },
     'express': (agent) => {
-      agent.expressMiddleware = (opts = {}) => {
-        return require('../modules/express.js')(agent, opts)
-      }
+      Hook(['express'], function (exports, name, basedir) {
+        agent.expressMiddleware = (opts = {}) => {
+          return require('../modules/express.js')(agent, opts)
+        }
+        return exports
+      })
     },
     'pg': (agent) => {
       Hook(['pg'], function (exports, name, basedir) {
@@ -35,7 +38,13 @@ class Instrumentation {
   }
 
   init (agent) {
-    agent._conf.modules.forEach(module => this.patch(module, agent))
+    if(agent._conf.autoWiring){
+       Object.keys(this._MODULES).map(module => {
+         this.patch(module, agent)
+       })
+    } else {
+      agent._conf.modules.forEach(module => this.patch(module, agent))
+    }
   }
 
   patch (name, agent) {
