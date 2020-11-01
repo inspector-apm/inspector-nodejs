@@ -4,10 +4,10 @@ const fs = require('fs')
 
 class IError {
 
-  constructor (error = {}, { hash }) {
+  constructor (error = {}, { hash, name }) {
     this._model = 'error'
     this._timestamp = new Date().getTime()
-    this._transaction = { hash }
+    this._transaction = { hash, name }
     this._handled = false
     if (error.code) {
       this._code = error.code
