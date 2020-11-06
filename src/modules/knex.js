@@ -1,6 +1,6 @@
 'use strict'
 
-var shimmer = require('../shimmer')
+var shimmer = require('shimmer')
 
 module.exports = function (Knex, inspector, version) {
 
@@ -16,7 +16,7 @@ module.exports = function (Knex, inspector, version) {
 
       var obj = {}
       Error.captureStackTrace(obj)
-      builder[symbols.knexStackObj] = obj
+      builder['InspectorStack'] = obj
 
       return builder
     }
@@ -34,7 +34,7 @@ module.exports = function (Knex, inspector, version) {
   function wrapQuery (original) {
     return function wrappedQuery () {
       if (this.connection) {
-        this.connection[Symbol('InspectorStack')] = this.builder ? this.builder[Symbol('InspectorStack')] : null
+        this.connection['InspectorStack'] = this.builder ? this.builder['InspectorStack'] : null
       }
       return original.apply(this, arguments)
     }
