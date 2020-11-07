@@ -1,6 +1,6 @@
 {
   "name": "@inspector-apm/inspector-nodejs",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "Real-Time monitoring for NodeJS Applications",
   "main": "index.js",
   "scripts": {
