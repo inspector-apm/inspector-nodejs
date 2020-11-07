@@ -1,7 +1,8 @@
 const tap = require('tap')
 
 const inspector = require('../../index')({
-  ingestionKey: '1b077c76ea167c449860eff6e9358227'
+  ingestionKey: '',
+  enable: false
 })
 
 async function inspector_test (throwError = false) {
