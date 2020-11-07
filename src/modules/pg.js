@@ -33,7 +33,7 @@ function patchClient (Client, klass, inspector) {
     return function wrappedFunction (sql) {
       if (inspector.isRecording()) {
 
-        let segment = inspector.startSegment('pgsql query')
+        let segment = inspector.startSegment('pgsql')
 
         if (sql && typeof sql.text === 'string') sql = sql.text
 

@@ -18,7 +18,8 @@ module.exports = (mongodb, inspector, version = null) => {
         event.commandName
       ].join('.')
 
-      let segment = inspector.startSegment(name)
+      let segment = inspector.startSegment('mongodb')
+      segment._label = name
 
       if (segment) {
         activeSegments.set(event.requestId, segment)

@@ -15,7 +15,7 @@ module.exports = function (mysql2, inspector, version) {
         let sqlStr = null
         let hasCallback = false
 
-        let segment = inspector.startSegment('mysql query')
+        let segment = inspector.startSegment('mysql2')
 
         switch (typeof sql) {
           case 'string':
