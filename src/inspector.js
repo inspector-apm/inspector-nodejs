@@ -12,8 +12,6 @@ class Inspector {
       ingestionKey: '',
       enabled: true,
       autoWiring: true,
-      version: '1.0.0',
-      options: [],
       modules: [],
       maxEntries: 100,
       ...conf
