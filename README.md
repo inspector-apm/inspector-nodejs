@@ -8,41 +8,49 @@ Install the latest version by:
 npm install @inspector-apm/inspector-nodejs --save
 ```
 
+## Configure the Ingestion Key
+
+You need an Ingestion Key to create an Inspector instance.  
+You can obtain a key creating a new project in your [Inspector](https://www.inspector.dev) dashboard.
+
+If you use `dotenv` you can configure the Inspector Ingestion Key in your environment file:
+
+```
+INSPECTOR_INGESTION_KEY=[ingestion key]
+```
+
 ## Use
 
-To start sending data to Inspector you need an API key to create a configuration instance. You can obtain `INSPECTOR_API_KEY` creating a new project in your [Inspector](https://www.inspector.dev) dashboard.
+It’s important that Inspector is started before you require any other modules 
+in your NodeJS application - i.e. before, `express`, `http`, `mysql`, etc.
 
 ```javascript
-const { Inspector } = require('inspector-nodejs')
+/*
+ * Initialize Inspector with the Ingestion Key.
+ */
+const inspector = require('@inspector-apm/inspector-nodejs')({
+  ingestionKey: 'xxxxxxxxxxxxx',
+})
 
-const inspector = new Inspector({})
+const app = require('express')()
+
+/*
+ * Attach the middleware to monitor HTTP requests fulfillment.
+ */
+app.use(inspector.expressMiddleware())
+
+app.get('/', require('routes').home)
+app.get('/posts', require('routes').posts)
+app.get('/posts/{id}', require('routes').post)
+
+app.listen(3006)
 ```
 
+Inspector will monitor your code execution in real time alerting you if something goeas wrong.
 
-All start with a `transaction`. Transaction represent an execution cycle and it can contains one or hundred of segments:
+## Official Documentation
 
-```javascript
-// Start an execution cycle with a transaction
-const transaction = inspector.startTransaction('foo')
-```
-
-Use `addSegment` method to monitor a code block in your transaction:
-
-```javascript
-// Trace performance of a code block
-const segment = await inspector.addSegment(
-    async (segment) => {
-      // Do something here...
-      return segment
-    },
-    'test async',
-    'test label',
-  )
-```
-
-Inspector will collect information to produce performance chart in your dashboard.
-
-**[See official documentation](https://docs.inspector.dev)**
+**[See official documentation](https://docs.inspector.dev/platforms/nodejs)**
 
 ## LICENSE
 
