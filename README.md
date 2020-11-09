@@ -1,5 +1,5 @@
-# inspector-nodejs
-Real-Time monitoring for NodeJs backend applications.
+# Inspector | Code Execution Monitoring Tool
+Simple code execution monitoring, built for NodeJs developers.
 
 ## Install
 Install the latest version by:
