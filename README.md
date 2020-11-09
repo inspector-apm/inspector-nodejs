@@ -10,10 +10,9 @@ npm install @inspector-apm/inspector-nodejs --save
 
 ## Configure the Ingestion Key
 
-You need an Ingestion Key to create an Inspector instance.  
-You can obtain a key creating a new project in your [Inspector](https://www.inspector.dev) dashboard.
+You need an Ingestion Key to create an Inspector instance. You can obtain a key creating a new project in your [dashboard](https://www.inspector.dev).
 
-If you use `dotenv` you can configure the Inspector Ingestion Key in your environment file:
+If you use `dotenv` you can configure the Ingestion Key in your environment file:
 
 ```
 INSPECTOR_INGESTION_KEY=[ingestion key]
