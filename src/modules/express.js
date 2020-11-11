@@ -11,8 +11,8 @@ module.exports = function (inspector, opts = {}) {
 
     req.inspector = inspector
 
-    res.on('close', () => {
-      transaction._name = `${req.method} ${req.route.path}`
+    res.on('finish', () => {
+      transaction._name = `${req.method} ${req.route ? req.route.path : req.originalUrl}`
       transaction.setResult('' + res.statusCode)
       if (req.body) {
         transaction.addContext('body', req.body)
