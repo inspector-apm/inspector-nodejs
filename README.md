@@ -38,14 +38,19 @@ const app = require('express')()
  */
 app.use(inspector.expressMiddleware())
 
-app.get('/', require('routes').home)
-app.get('/posts', require('routes').posts)
-app.get('/posts/{id}', require('routes').post)
+
+app.get('/', function (req, res) {
+    return res.send('Home Page!')
+})
+
+app.get('/posts/:id', function (req, res) {
+    return res.send('Single Post Details!')
+})
 
 app.listen(3006)
 ```
 
-Inspector will monitor your code execution in real time alerting you if something goeas wrong.
+Inspector will monitor your code execution in real time alerting you if something goes wrong.
 
 ## Official Documentation
 
