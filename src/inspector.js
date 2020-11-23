@@ -24,19 +24,17 @@ class Inspector {
     Instrumentation.init(this)
 
     process.on('uncaughtException', async (err, origin) => {
-      if (this.isRecording()) {
-        await this.reportException(err)
-      } else {
-        console.log(err)
+      if (!this.isRecording()) {
+        this.startTransaction('Error')
       }
+      await this.reportException(err)
     })
 
     process.on('unhandledRejection', async (err, origin) => {
-      if (this.isRecording()) {
-        await this.reportException(err)
-      } else {
-        console.log(err)
+      if (!this.isRecording()) {
+        this.startTransaction('Error')
       }
+      await this.reportException(err)
     })
 
     process.on('beforeExit', (code) => {
