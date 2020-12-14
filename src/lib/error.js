@@ -4,10 +4,16 @@ const fs = require('fs')
 
 class IError {
 
-  constructor (error = {}, { hash, name }) {
+  constructor (error = {}, {
+    hash,
+    name
+  }) {
     this._model = 'error'
     this._timestamp = new Date().getTime()
-    this._transaction = { hash, name }
+    this._transaction = {
+      hash,
+      name
+    }
     this._handled = false
     if (error.code) {
       this._code = error.code
@@ -16,7 +22,14 @@ class IError {
   }
 
   async populateError () {
-    const { className, errMex, file, line, code, stack } = await this.errorElementFromStackTrace(this._errorStack)
+    const {
+      className,
+      errMex,
+      file,
+      line,
+      code,
+      stack
+    } = await this.errorElementFromStackTrace(this._errorStack)
     this._message = errMex
     this._class = className
     this._file = file
@@ -77,7 +90,7 @@ class IError {
     const stack = []
     for (let i = 1; i < aStack.length; i++) {
       const stackRow = this.formatStackElementToObj(aStack[i])
-      if (stackRow.file.indexOf('internal/') === -1) {
+      if (stackRow.file && stackRow.file.indexOf('internal/') === -1) {
         stackRow.code = await this.getCodeOfStackElement(stackRow)
         stack.push(stackRow)
       }
@@ -119,7 +132,7 @@ class IError {
   formatStackElementToObj (stackRow) {
     const row = stackRow.replace('    at ', '')
     let fn = null
-    let file = null
+    let file = ''
     let line = null
     let ch = null
     if (row.indexOf('(') !== -1) {
@@ -127,14 +140,26 @@ class IError {
       fn = rowSplit[0].trim()
       const fileComplete = rowSplit[1].replace(')', '')
       const fileSplit = fileComplete.split(':')
-      file = fileSplit[0].trim()
-      line = fileSplit[1].trim()
-      ch = fileSplit[2].trim()
+      if (fileSplit.length >= 3) {
+        for (let i = 0; i < fileSplit.length - 2; i++) {
+          file += fileSplit[i]
+        }
+        line = fileSplit[fileSplit.length - 2].trim()
+        ch = fileSplit[fileSplit.length - 1].trim()
+      } else {
+        file = null
+      }
     } else {
       const fileSplit = row.split(':')
-      file = fileSplit[0].trim()
-      line = fileSplit[1].trim()
-      ch = fileSplit[2].trim()
+      if (fileSplit.length >= 3) {
+        for (let i = 0; i < fileSplit.length - 2; i++) {
+          file += fileSplit[i]
+        }
+        line = fileSplit[fileSplit.length - 2].trim()
+        ch = fileSplit[fileSplit.length - 1].trim()
+      } else {
+        file = null
+      }
     }
     return {
       fn,
