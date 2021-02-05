@@ -10,7 +10,7 @@ class Inspector {
       url: "ingest.inspector.dev",
       ingestionKey: "",
       enabled: true,
-      version: "1.7.6",
+      version: "1.8.1",
       autoWiring: true,
       modules: [],
       maxEntries: 100,
@@ -25,6 +25,7 @@ class Inspector {
     process.on("uncaughtException", async (err, origin) => {
       if (!this.isRecording()) {
         this.startTransaction("Error");
+        this._transaction.setResult("error");
       }
       await this.reportException(err);
     });
@@ -32,6 +33,7 @@ class Inspector {
     process.on("unhandledRejection", async (err, origin) => {
       if (!this.isRecording()) {
         this.startTransaction("Error");
+        this._transaction.setResult("error");
       }
       await this.reportException(err);
     });
