@@ -22,6 +22,11 @@ const _MODULES = {
       return exports;
     });
   },
+  fastify: (agent) => {
+    agent.fastify = (opts = {}) => {
+      return require("../modules/fastify.js")(agent, opts);
+    };
+  },
   pg: (agent) => {
     Hook(["pg"], function (exports, name, basedir) {
       const version = require(path.join(basedir, "package.json")).version;
