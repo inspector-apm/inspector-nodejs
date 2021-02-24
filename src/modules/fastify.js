@@ -1,6 +1,6 @@
 "use strict";
 const fp = require("fastify-plugin");
-module.exports = function (inspector, opts = {}) {
+module.exports = function (inspector, extOpts = {}) {
   return fp(function (fastify, opts, next) {
     if (!fastify.inspector) {
       fastify.decorate("inspector", inspector);
@@ -10,13 +10,18 @@ module.exports = function (inspector, opts = {}) {
       const method = request.routerMethod || request.raw.method; // Fallback for fastify >3 <3.3.0
       const url = request.routerPath || reply.context.config.url; // Fallback for fastify >3 <3.3.0
       const name = method + " " + url;
-      const transaction = fastify.inspector.startTransaction(`${name}`);
 
-      transaction.addContext("Request", {
-        params: request.params,
-        query: request.query,
-        url: request.url,
-      });
+      if (
+        Array.isArray(extOpts.excludePaths) &&
+        extOpts.excludePaths.indexOf(url) === -1
+      ) {
+        const transaction = fastify.inspector.startTransaction(`${name}`);
+        transaction.addContext("Request", {
+          params: request.params,
+          query: request.query,
+          url: request.url,
+        });
+      }
       done();
     });
 
