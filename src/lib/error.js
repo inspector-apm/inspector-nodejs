@@ -90,8 +90,8 @@ class IError {
       const site = aStack[0];
       props = {
         file: site.getFileName(),
-        line: site.getLineNumber(),
-        columnNumber: site.getColumnNumber(),
+        line: parseInt(site.getLineNumber()),
+        columnNumber: parseInt(site.getColumnNumber()),
         methodName: site.getMethodName(),
         className: site.getFunctionName() || site.getFileName(),
         errMex: error.message,
@@ -103,7 +103,7 @@ class IError {
       const site = aStack[i];
       const stackRow = {
         file: site.getFileName(),
-        line: site.getLineNumber(),
+        line: parseInt(site.getLineNumber()),
       };
       // const stackRow = this.formatStackElementToObj(aStack[i]);
       if (stackRow.file && stackRow.file.indexOf("internal/") === -1) {
