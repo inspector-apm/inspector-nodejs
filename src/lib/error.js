@@ -4,6 +4,7 @@ const fs = require("fs");
 
 class IError {
   constructor(error = {}, { hash, name }) {
+    this.error = error;
     this._model = "error";
     this._timestamp = new Date().getTime();
     this._transaction = {
@@ -14,7 +15,9 @@ class IError {
     if (error.code) {
       this._code = error.code;
     }
-    this.message = error.message || "";
+    if (error.message) {
+      this.message = error.message;
+    }
     this._errorStack = error.stack;
   }
 
@@ -26,7 +29,7 @@ class IError {
         file,
         line,
         stack,
-      } = await this.errorElementFromStackTrace(this._errorStack);
+      } = await this.errorElementFromStackTrace(this.error);
       this._message = errMex;
       this._class = className;
       this._file = file;
@@ -80,41 +83,36 @@ class IError {
     return obj;
   }
 
-  async errorElementFromStackTrace(stacktrace) {
-    const aStack = stacktrace.split("\n");
-    const classLine = aStack[0];
-    const classLineSplitted = classLine.split(":");
-    let className;
-    let errMex;
-    if (classLineSplitted.length > 2) {
-      className = classLineSplitted[1];
-      errMex = classLineSplitted[2].trim();
-    } else if (classLineSplitted.length === 2) {
-      className = classLineSplitted[0];
-      errMex = classLineSplitted[1].trim();
-    } else {
-      className = classLineSplitted[0];
-      errMex = classLineSplitted[0].trim();
+  async errorElementFromStackTrace(error) {
+    const aStack = error.stack;
+    let props = {};
+    if (aStack.length > 2) {
+      const site = aStack[0];
+      props = {
+        file: site.getFileName(),
+        line: site.getLineNumber(),
+        columnNumber: site.getColumnNumber(),
+        methodName: site.getMethodName(),
+        className: site.getFunctionName() || site.getFileName(),
+        errMex: error.message,
+      };
     }
-    let firstRow = this.formatStackElementToObj(aStack[1]);
-    const file = firstRow.file;
-    const line = firstRow.line;
-    const code = await this.getCodeOfStackElement(firstRow);
 
     const stack = [];
-    for (let i = 1; i < aStack.length; i++) {
-      const stackRow = this.formatStackElementToObj(aStack[i]);
+    for (let i = 0; i < aStack.length; i++) {
+      const site = aStack[i];
+      const stackRow = {
+        file: site.getFileName(),
+        line: site.getLineNumber(),
+      };
+      // const stackRow = this.formatStackElementToObj(aStack[i]);
       if (stackRow.file && stackRow.file.indexOf("internal/") === -1) {
         stackRow.code = await this.getCodeOfStackElement(stackRow);
         stack.push(stackRow);
       }
     }
     return {
-      className,
-      errMex,
-      file,
-      line,
-      code,
+      ...props,
       stack,
     };
   }

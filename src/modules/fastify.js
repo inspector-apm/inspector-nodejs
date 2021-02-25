@@ -12,7 +12,7 @@ module.exports = function (inspector, extOpts = {}) {
       const name = method + " " + url;
 
       if (
-        Array.isArray(extOpts.excludePaths) &&
+        !Array.isArray(extOpts.excludePaths) ||
         extOpts.excludePaths.indexOf(url) === -1
       ) {
         const transaction = fastify.inspector.startTransaction(`${name}`);

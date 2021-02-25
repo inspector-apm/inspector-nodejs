@@ -10,12 +10,14 @@ class Inspector {
       url: "ingest.inspector.dev",
       ingestionKey: "",
       enabled: true,
-      version: "1.9.2",
+      version: "1.9.3",
       autoWiring: true,
       modules: [],
       maxEntries: 100,
       ...conf,
     };
+    const _ = Error.prepareStackTrace;
+    Error.prepareStackTrace = (error, stack) => stack;
     this._transaction = null;
     this.transport = new Transport(this._conf);
 
@@ -28,6 +30,7 @@ class Inspector {
         this._transaction.setResult("error");
       }
       await this.reportException(err);
+      Error.prepareStackTrace = _;
     });
 
     process.on("unhandledRejection", async (err, origin) => {
@@ -36,12 +39,14 @@ class Inspector {
         this._transaction.setResult("error");
       }
       await this.reportException(err);
+      Error.prepareStackTrace = _;
     });
 
     process.on("beforeExit", (code) => {
       if (this.isRecording()) {
         this.flush();
       }
+      Error.prepareStackTrace = _;
     });
   }
 
