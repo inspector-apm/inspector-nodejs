@@ -1,6 +1,7 @@
 'use strict'
 const readline = require('readline')
 const fs = require('fs')
+const os = require('os')
 
 class IError {
 
@@ -13,6 +14,9 @@ class IError {
       this._code = error.code
     }
     this._errorStack = error.stack
+    this._host = {
+      hostname: os.hostname(),
+    }
   }
 
   async populateError () {
@@ -38,7 +42,8 @@ class IError {
       'line': this._line,
       'handled': this._handled,
       'stack': [],
-      'transaction': this._transaction
+      'transaction': this._transaction,
+      'host': this._host
     }
 
     if (this._code) {
