@@ -1,6 +1,6 @@
 {
   "name": "@inspector-apm/inspector-nodejs",
-  "version": "1.7.8",
+  "version": "1.9.4",
   "description": "Real-Time monitoring for NodeJS Applications",
   "main": "index.js",
   "scripts": {
@@ -24,16 +24,17 @@
   },
   "homepage": "https://github.com/inspector-apm/inspector-nodejs#readme",
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.0",
+    "eslint": "^7.19.0",
+    "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.2",
-    "tap": "^14.10.8"
+    "eslint-plugin-standard": "^4.1.0",
+    "tap": "^14.11.0"
   },
   "dependencies": {
-    "require-in-the-middle": "^5.0.3",
+    "fastify-plugin": "^3.0.0",
+    "require-in-the-middle": "^5.1.0",
     "shimmer": "^1.2.1"
   }
 }
