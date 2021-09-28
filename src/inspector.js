@@ -10,7 +10,7 @@ class Inspector {
       url: "ingest.inspector.dev",
       ingestionKey: "",
       enabled: true,
-      version: "1.9.6",
+      version: "1.9.7",
       autoWiring: true,
       modules: [],
       maxEntries: 100,
