@@ -14,10 +14,10 @@ class Inspector {
       autoWiring: true,
       modules: [],
       maxEntries: 100,
-      ...conf,
+      ...conf
     };
     const _ = Error.prepareStackTrace;
-    Error.prepareStackTrace = (error, stack) => stack;
+    // Error.prepareStackTrace = (error, stack) => stack;
     this._transaction = null;
     this.transport = new Transport(this._conf);
 
