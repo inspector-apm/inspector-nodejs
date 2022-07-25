@@ -1,5 +1,6 @@
 # Inspector | Code Execution Monitoring Tool
 
+[![npm version](https://badge.fury.io/js/@inspector-apm%2Finspector-nodejs.svg)](https://badge.fury.io/js/@inspector-apm%2Finspector-nodejs)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 
 Simple code execution monitoring for NodeJs backend applications.

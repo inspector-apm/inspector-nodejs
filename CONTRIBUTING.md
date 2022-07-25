@@ -1,4 +1,4 @@
-# Contributing to Inspector for Laravel
+# Contributing to Inspector for Node.Js
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
