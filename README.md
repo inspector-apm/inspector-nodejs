@@ -1,5 +1,8 @@
 # Inspector | Code Execution Monitoring Tool
-Simple code execution monitoring, built for NodeJs developers.
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+
+Simple code execution monitoring for NodeJs backend applications.
 
 ## Install
 Install the latest version by:
@@ -18,10 +21,9 @@ If you use `dotenv` you can configure the Ingestion Key in your environment file
 INSPECTOR_INGESTION_KEY=[ingestion key]
 ```
 
-## Use
+## Integrate in your code
 
-It’s important that Inspector is started before you require any other modules 
-in your NodeJS application - i.e. before, `express`, `http`, `mysql`, etc.
+Inspector must be initialized before you require any other modules - i.e. before, `express`, `http`, `mysql`, etc.
 
 ```javascript
 /*
@@ -50,11 +52,15 @@ app.get('/posts/:id', function (req, res) {
 app.listen(3006)
 ```
 
-Inspector will monitor your code execution in real time alerting you if something goes wrong.
+Inspector will monitor your code execution in real time, alerting you if something goes wrong.
 
 ## Official Documentation
 
-**[See official documentation](https://docs.inspector.dev/platforms/nodejs)**
+**[Go to the official documentation](https://docs.inspector.dev/platforms/nodejs)**
+
+## Contributing
+
+We encourage you to contribute to Inspector! Please check out the [Contribution Guidelines](CONTRIBUTING.md) about how to proceed. Join us!
 
 ## LICENSE
 
