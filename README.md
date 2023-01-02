@@ -56,6 +56,11 @@ app.listen(3006)
 
 Inspector will monitor your code execution in real time, alerting you if something goes wrong.
 
+## Supported frameworks:
+
+- [ExpressJs](https://docs.inspector.dev/guides/get-started-with-express)
+- [Fastify](https://docs.inspector.dev/guides/fastify)
+
 ## Official Documentation
 
 **[Go to the official documentation](https://docs.inspector.dev/platforms/nodejs)**
