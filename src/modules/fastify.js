@@ -18,7 +18,7 @@ module.exports = function (inspector, opts = {}) {
 
         if (Array.isArray(opts.excludePaths)) {
           for (let rule in opts.excludePaths) {
-            if (utils.matchRule(url, rule)) {
+            if (utils.matchRule(url, opts.excludePaths[rule])) {
               shouldBeMonitored = false;
               break;
             }
@@ -28,7 +28,7 @@ module.exports = function (inspector, opts = {}) {
         if (shouldBeMonitored) {
           const transaction = fastify.inspector.startTransaction(method + " " + url);
 
-          transaction.addContext("Request", {
+          transaction.addContext("Url", {
             params: request.params,
             query: request.query,
             url: request.url,
@@ -43,7 +43,7 @@ module.exports = function (inspector, opts = {}) {
         if (transaction) {
           transaction.setResult("" + reply.statusCode);
 
-          transaction.addContext("body", request.body);
+          transaction.addContext("Body", request.body);
 
           transaction.addContext("Response", {
             status_code: reply.statusCode,
