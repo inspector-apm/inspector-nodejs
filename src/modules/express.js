@@ -9,7 +9,7 @@ module.exports = function (inspector, opts = {}) {
 
     if (Array.isArray(opts.excludePaths)) {
       for (let rule in opts.excludePaths) {
-        if (utils.matchRule(req.originalUrl, opts.excludePaths[rule])) {
+        if (utils.wildcardMatchRule(req.originalUrl, opts.excludePaths[rule])) {
           shouldBeMonitored = false;
           break;
         }

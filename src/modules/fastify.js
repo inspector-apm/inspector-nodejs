@@ -18,7 +18,7 @@ module.exports = function (inspector, opts = {}) {
 
         if (Array.isArray(opts.excludePaths)) {
           for (let rule in opts.excludePaths) {
-            if (utils.matchRule(url, opts.excludePaths[rule])) {
+            if (utils.wildcardMatchRule(url, opts.excludePaths[rule])) {
               shouldBeMonitored = false;
               break;
             }

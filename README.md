@@ -7,7 +7,7 @@
 Simple code execution monitoring for NodeJs backend applications.
 
 ## Install
-Install the latest version by:
+Install the latest version via npm:
 
 ```
 npm install @inspector-apm/inspector-nodejs --save

@@ -1,4 +1,4 @@
-exports.matchRule = function(str, rule) {
-    var escapeRegex = (str) => str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+exports.wildcardMatchRule = function(str, rule) {
+    let escapeRegex = (str) => str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     return new RegExp("^" + rule.split("*").map(escapeRegex).join(".*") + "$").test(str);
 }
