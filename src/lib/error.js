@@ -73,7 +73,7 @@ class IError {
 
     for (const [index, line] of rawStack.entries()) {
       let lineObj = stacktrace.stackLineParser(line)
-      lineObj.stack = await stacktrace.getCodeOfStackElement(lineObj)
+      lineObj.code = await stacktrace.getCodeOfStackElement(lineObj)
 
       // Populate the top level object
       if (index === 0) {
