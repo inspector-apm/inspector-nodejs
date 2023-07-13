@@ -76,7 +76,7 @@ class IError {
       lineObj.stack = await stacktrace.getCodeOfStackElement(lineObj)
 
       // Populate the top level object
-      if (index === 1) {
+      if (index === 0) {
         errorObj.file = lineObj.file
         errorObj.line = lineObj.line
       }
