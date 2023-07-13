@@ -1,7 +1,6 @@
 'use strict'
-const readline = require('readline')
-const fs = require('fs')
 const os = require('os')
+const stacktrace = require('./stacktrace')
 
 class IError {
 
@@ -13,14 +12,14 @@ class IError {
     if (error.code) {
       this._code = error.code
     }
-    this._errorStack = error.stack
+    this._errorStack = error.stack || error.stacktrace || ''
     this._host = {
       hostname: os.hostname()
     }
   }
 
   async populateError () {
-    const { className, errMex, file, line, code, stack } = await this.errorElementFromStackTrace(this._errorStack)
+    const { className, errMex, file, line, stack } = await this.errorElementFromStackTrace(this._errorStack)
     this._message = errMex
     this._class = className
     this._file = file
@@ -68,8 +67,32 @@ class IError {
     return obj
   }
 
-  async errorElementFromStackTrace (stacktrace) {
-    const aStack = stacktrace.split('\n')
+  async errorElementFromStackTrace (rawStack) {
+    rawStack = rawStack.split('\n')
+
+    let firstLine = rawStack.shift().split(':')
+
+    let errorObj = {
+      className: firstLine[0],
+      errMex: firstLine[1].trim(),
+      stack: []
+    }
+
+    for await (const [index, line] of rawStack.entries()) {
+      let lineObj = stacktrace.stackLineParser(line)
+      lineObj.stack = stacktrace.getCodeOfStackElement(lineObj)
+
+      // Populate the top level object
+      if (index === 1) {
+        errorObj.file = lineObj.file
+        errorObj.line = lineObj.line
+      }
+      errorObj.stack.push(lineObj)
+    }
+
+    return errorObj
+
+    /*const aStack = stacktrace.split('\n')
     const classLine = aStack[0]
     const className = classLine.split(':')[0]
     const errMex = classLine.split(':')[1].trim()
@@ -94,10 +117,10 @@ class IError {
       line,
       code,
       stack,
-    }
+    }*/
   }
 
-  async getCodeOfStackElement (stackObj, limit = 10) {
+  /*async getCodeOfStackElement (stackObj, limit = 10) {
     const code = []
     let i = 0
     let minLine = (parseInt(stackObj.line) - limit) > 1 ? (stackObj.line - limit) : 1
@@ -119,9 +142,14 @@ class IError {
       }
     }
     return code
-  }
+  }*/
 
-  formatStackElementToObj (stackRow) {
+  /**
+   *
+   * @param stackRow
+   * @returns {{file: string, ch: string, line: string, fn: null}}
+   */
+  /*formatStackElementToObj (stackRow) {
     const row = stackRow.replace('    at ', '')
     let fn = null
     let file = null
@@ -147,7 +175,7 @@ class IError {
       line,
       ch
     }
-  }
+  }*/
 
 }
 
