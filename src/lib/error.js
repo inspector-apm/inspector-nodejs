@@ -9,9 +9,6 @@ class IError {
     this._timestamp = new Date().getTime()
     this._transaction = { hash, name }
     this._handled = false
-    if (error.code) {
-      this._code = error.code
-    }
     this._errorStack = error.stack || error.stacktrace || ''
     this._host = {
       hostname: os.hostname()
@@ -19,8 +16,8 @@ class IError {
   }
 
   async populateError () {
-    const { className, errMex, file, line, stack } = await this.errorElementFromStackTrace(this._errorStack)
-    this._message = errMex
+    const { className, errorMessage, file, line, stack } = await this.errorElementFromStackTrace(this._errorStack)
+    this._message = errorMessage
     this._class = className
     this._file = file
     this._line = line
@@ -40,16 +37,12 @@ class IError {
       'file': this._file,
       'line': this._line,
       'handled': this._handled,
-      'stack': [],
       'transaction': this._transaction,
-      'host': this._host
+      'host': this._host,
+      'stack': this._stack
     }
 
-    if (this._code) {
-      obj.code = this._code
-    }
-
-    if (Array.isArray(this._stack) && this._stack.length > 0) {
+    /*if (Array.isArray(this._stack) && this._stack.length > 0) {
       this._stack.map(item => {
         const tObj = {
           'type': item.type ? item.type : '',
@@ -62,7 +55,7 @@ class IError {
         }
         obj.stack.push(tObj)
       })
-    }
+    }*/
 
     return obj
   }
@@ -74,13 +67,13 @@ class IError {
 
     let errorObj = {
       className: firstLine[0],
-      errMex: firstLine[1].trim(),
+      errorMessage: firstLine[1].trim(),
       stack: []
     }
 
-    for await (const [index, line] of rawStack.entries()) {
+    for (const [index, line] of rawStack.entries()) {
       let lineObj = stacktrace.stackLineParser(line)
-      lineObj.stack = stacktrace.getCodeOfStackElement(lineObj)
+      lineObj.stack = await stacktrace.getCodeOfStackElement(lineObj)
 
       // Populate the top level object
       if (index === 1) {
