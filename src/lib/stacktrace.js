@@ -101,26 +101,25 @@ exports.getCodeOfStackElement = async function (lineObj, limit = 10) {
         return;
     }
 
-    const code = []
-    let i = 0
-    let minLine = (parseInt(lineObj.line) - limit) > 1 ? (lineObj.line - limit) : 1
-    let maxLine = parseInt(lineObj.line) + limit
+    const code = [];
+    let i = 0;
+    let minLine = (parseInt(lineObj.line) - limit) > 1 ? (lineObj.line - limit) : 1;
+    let maxLine = parseInt(lineObj.line) + limit;
 
     const rl = readline.createInterface({
         input: fs.createReadStream(lineObj.file),
         crlfDelay: Infinity
-    })
+    });
 
     for await (const line of rl) {
         i++
         if (i >= minLine && i <= maxLine) {
-            const obj = {
+            code.push({
                 code: line,
                 line: i
-            }
-            code.push(obj)
+            });
         }
     }
 
-    return code
+    return code;
 }
