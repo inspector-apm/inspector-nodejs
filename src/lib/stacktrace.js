@@ -97,7 +97,7 @@ exports.stackLineParser = function(line) {
  * @returns {*[]}
  */
 exports.getCodeOfStackElement = async function (lineObj, limit = 10) {
-    if (!lineObj.in_app) {
+    if (!lineObj?.in_app) {
         return;
     }
 
